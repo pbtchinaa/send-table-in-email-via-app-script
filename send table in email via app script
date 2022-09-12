@@ -1,0 +1,55 @@
+function getdata()
+{
+
+var ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1w4HN_2UZSc2jhlZVg6lSasIPXpE6ej_RfCrw2LQCGXc/edit#gid=0");
+var tab = ss.getSheetByName("Sheet1");
+var datavalues = tab.getDataRange().getValues();
+
+
+var html = " Hi Team, please follow the list.  <br><br> " + '<table>';
+
+if(datavalues.length>0)
+{
+  for(var i=0;i<datavalues.length;i++) // couting the rows of the table
+  {
+    html+= '<tr style = bgcolor="Blue">';  // html = html + something
+    for(var j=0;j<datavalues[i].length;j++)
+    // check if the row is header of the table or normal row
+    {
+      if(i==0)
+      {  
+
+        html+= Utilities.formatString('<td bgcolor="LightBlue"; style = "border:1px solid black" <th>%s</th></td>',datavalues[i][j]);
+
+      }else 
+      {
+          
+        html+= Utilities.formatString('<td style = "border:1px solid black" > %s</td>',datavalues[i][j]);
+
+      }
+
+
+    }
+
+  }
+  html+='<table>';
+}
+
+return html;
+
+
+}
+
+
+function sendmail() 
+{
+
+  MailApp.sendEmail({
+    to: "pbtchinaa@gmail.com",
+    subject : "New mail",
+    htmlBody : getdata()
+
+  })
+
+
+}
